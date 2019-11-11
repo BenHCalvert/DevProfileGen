@@ -20,49 +20,32 @@ const questions = [
     choices: ["green", "blue-ish", "grey", "purple"]
     }
   ];
-// function to prompt user for questions
+// function to prompt user for questions, c-log response & call github API
 function askAboutIt(){
-    inquirer.prompt(questions);
+    inquirer.prompt(questions)
+    .then(function(response) {
+        const gitUser = response.username;
+        const color = response.color;
+        const gitURL = 'https://github.com/';
+        const gitProfile = `${gitURL}${gitUser}`;  
+        console.log(`Thanks! Your favorite color is ${color} and your github url is ${gitProfile}.`);
+        const queryUrl = `https://api.github.com/users/${username}/repos?per_page=100`;
+        const starredURL = `https://api.github.com/users/${data.username}/starred`;
+
+        axios.get(queryUrl).then(function(response) {
+            
+            fs.writeFile("test.txt", response.name , function(err) {
+              if (err) {
+                throw err;
+              }
+      
+              console.log(`Saved ${response.name} to file`);
+            });
+          });
+    });
 };
+askAboutIt();
 
-// function to use answers
-function getResponse(response) {
-    const gitURL = `https://github.com/${response.username}`;
-    const queryUrl = `https://api.github.com/users/${response.username}`;
-    const starredUrl = `https://api.github.com/users/${response.username}/starred`;
-    const favColor = response.color;
-    console.log(`Thanks! Your favorite color is ${favColor} and your github url is ${gitURL}.`)
-
-    // return axios.all([axios.get(queryUrl), axios.get(starredUrl)]);
-  };
-
-  askAboutIt()
- 
-
-
-// Prompt user with Inquirer
-// inquirer
-//   .prompt([
-//     {
-//       type: "input",
-//       message: "What is your github username",
-//       name: "username"
-//     },
-//     {
-//     type: "list",
-//     message: "Select your favorite color:",
-//     name: "color",
-//     choices: ["green", "blue-ish", "grey", "purple"]
-//     }
-//   ])
-//   .then(function(response) {
-//       const gitUser = response.username;
-//       const color = response.color;
-//       const gitURL = 'https://github.com/';
-//       const gitProfile = `${gitURL}${gitUser}`;
-
-//       console.log(`Thanks! Your favorite color is ${color} and your github url is ${gitProfile}.`);
-//     });
   
 
 //add new line to the current file
