@@ -5,6 +5,8 @@ var inquirer = require("inquirer");
 // Require Axios
 const axios = require("axios");
 
+
+
 // Prompt user with Inquirer
 inquirer
   .prompt([
@@ -28,25 +30,16 @@ inquirer
 
       console.log(`Thanks! Your favorite color is ${color} and your github url is ${gitProfile}.`);
     });
-    
-    // if (response.confirm === response.password) {
-    //   console.log("Thanks! Your user name is ");
-    // }
-    // else {
-    //   console.log("You forgot your password already?!");
-    // }
-
-
-
+  
 
 //add new line to the current file
-fs.appendFile("log.txt", process.argv[2] + '\n', function(err) {
+// fs.appendFile("log.txt", process.argv[2] + '\n', function(err) {
 
-  if (err) {
-    console.log(err);
-  }
-  else {
-    console.log("Commit logged!");
-  }
+//   if (err) {
+//     console.log(err);
+//   }
+//   else {
+//     console.log("Commit logged!");
+//   }
 
-});
+// });
