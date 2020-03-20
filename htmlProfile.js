@@ -181,7 +181,7 @@ const colors = {
       <br>
       <br>
       <br>
-      <h5>Currently Working at ${res[0].data.company} </h5>
+      <center><h5>Currently Working at ${res[0].data.company}.</h5></center>
       <div class="links-nav">
         <a target="_blank" href="https://www.google.com/maps/place/${res[0].data.location}" class="nav-link"><i class="fas fa-location-arrow"></i> ${res[0].data.location}</a>
         <a target="_blank" href="${res[0].data.html_url}" class="nav-link"><i class="fab fa-github-square"></i> GitHub</a>
