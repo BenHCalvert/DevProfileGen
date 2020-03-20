@@ -6,10 +6,10 @@ const colors = {
       photoBorderColor: "black"
     },
     blue: {
-      wrapperBackground: "#5F64D3",
-      headerBackground: "#26175A",
+      wrapperBackground: "#9798ba",
+      headerBackground: "#3e316b",
       headerColor: "white",
-      photoBorderColor: "#73448C"
+      photoBorderColor: "#2e1a38"
     },
     pink: {
       wrapperBackground: "#879CDF",
@@ -57,7 +57,7 @@ const colors = {
              body {
              background-color: white;
              
-             font-family: Georgia, 'Times New Roman', Times, serif;
+             font-family:'Times New Roman', Times, serif;
              }
              main {
             
@@ -65,7 +65,7 @@ const colors = {
              padding-top: 30px;
              }
              h1, h2, h3, h4, h5, h6 {
-             font-family: Georgia, 'Times New Roman', Times, serif;
+             font-family:'Times New Roman', Times, serif;
              margin: 0;
              }
              h1 {
@@ -173,7 +173,7 @@ const colors = {
           </head>
     <body class="wrapper">
     <div class="photo-header">
-      <img src="${res[0].data.avatar_url}" alt="" />
+      <center><img src="${res[0].data.avatar_url}" alt="" /></center>
       <h2>Hello!</h2>
       <br>
       <br>

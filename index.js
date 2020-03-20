@@ -29,20 +29,7 @@ const writeToFile = (filename, data) => {
   });
 };
 
-const gitResponse = data => {
-  const userURL = `https://api.github.com/users/${data.username}`;
-  const favURL = `https://api.github.com/users/${data.username}/starred`;
-  return axios.all([axios.get(userURL), axios.get(favURL)]);
-};
-
-const readFromFile = page => {
-  fs.readFile(`${page}`, (err, data) => {
-    if (err) console.log(`${err}`);
-    return data;
-  });
-};
-
-const convertToPDF = page => {
+const pdfConverter = page => {
   const options = {
     format: "Legal"
   };
@@ -52,16 +39,23 @@ const convertToPDF = page => {
   });
 };
 
-async function init() {
+const gitAPICaller = data => {
+  const userURL = `https://api.github.com/users/${data.username}`;
+  const favURL = `https://api.github.com/users/${data.username}/starred`;
+  return axios.all([axios.get(userURL), axios.get(favURL)]);
+};
+
+
+async function start() {
   try {
     const data = await startQuestions();
-    const userResponse = await gitResponse(data);
+    const userResponse = await gitAPICaller(data);
     const page = htmlProfile(data, userResponse);
     writeToFile(filename, page);
-    convertToPDF(page);
+    pdfConverter(page);
   } catch (error) {
     console.log(`${error}`);
   }
 }
 
-init();
+start();
