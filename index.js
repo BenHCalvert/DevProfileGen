@@ -1,64 +1,67 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-const path = require("path");
-const open = require("open");
-const convertFactory = require("electron-html-to");
-const api = require("./api");
-const generateHTML = require("./generateHTML");
-
+const axios = require("axios");
+const pdf = require("html-pdf");
+const htmlProfile = require("./htmlProfile");
+const filename = "index.html";
 const questions = [
   {
     type: "input",
-    username: "github",
-    message: "What is your GitHub username?"
+    name: "username",
+    message: "Enter your GitHub username:"
   },
-
   {
     type: "list",
+    message: "Please pick your favorite color:",
     name: "color",
-    message: "What is your favorite color?",
-    choices: ["red", "blue", "green", "pink"]
+    choices: ["green", "blue", "pink", "red"]
   }
 ];
 
-function writeToFile(fileName, data) {
-  return fs.writeFileSync(path.join(process.cwd(), fileName), data);
-}
+const startQuestions = () => {
+  return inquirer.prompt(questions);
+};
 
-function init() {
-  inquirer.prompt(questions).then(({ username, color }) => {
-    console.log("Searching...");
-
-    api
-      .getUser(username)
-      .then(response =>
-        api.getTotalStars(username).then(stars => {
-          return generateHTML({
-            stars,
-            color,
-            ...response.data
-          });
-        })
-      )
-      .then(html => {
-        const conversion = convertFactory({
-          converterPath: convertFactory.converters.PDF
-        });
-
-        conversion({ html }, function(err, result) {
-          if (err) {
-            return console.error(err);
-          }
-
-          result.stream.pipe(
-            fs.createWriteStream(path.join(__dirname, "resume.pdf"))
-          );
-          conversion.kill();
-        });
-
-        open(path.join(process.cwd(), "resume.pdf"));
-      });
+const writeToFile = (filename, data) => {
+  fs.writeFile(filename, data, function(err) {
+    if (err) console.log(err);
+    console.log("File has been created successfully");
   });
+};
+
+const gitResponse = data => {
+  const userURL = `https://api.github.com/users/${data.username}`;
+  const favURL = `https://api.github.com/users/${data.username}/starred`;
+  return axios.all([axios.get(userURL), axios.get(favURL)]);
+};
+
+const readFromFile = page => {
+  fs.readFile(`${page}`, (err, data) => {
+    if (err) console.log(`${err}`);
+    return data;
+  });
+};
+
+const convertToPDF = page => {
+  const options = {
+    format: "Legal"
+  };
+  pdf.create(page, options).toFile("./devpage.pdf", function(err, res) {
+    if (err) return console.log(`${err}`);
+    console.log(`Your PDF is now available in the root folder of this project`);
+  });
+};
+
+async function init() {
+  try {
+    const data = await startQuestions();
+    const userResponse = await gitResponse(data);
+    const page = htmlProfile(data, userResponse);
+    writeToFile(filename, page);
+    convertToPDF(page);
+  } catch (error) {
+    console.log(`${error}`);
+  }
 }
 
 init();
