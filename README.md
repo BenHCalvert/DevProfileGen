@@ -9,3 +9,6 @@ npm install
 node index.js
 ```
 
+## See it in action:
+
+![](DevProfileGen.gif)
